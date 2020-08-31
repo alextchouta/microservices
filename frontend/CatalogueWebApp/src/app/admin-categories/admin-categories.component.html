@@ -1,0 +1,54 @@
+<div class="panel panel-default">
+  <div class="panel-heading"> Gestion des categories</div>
+  <div class="panel-body">
+    <div>
+      <button class="btn btn-success" (click)="onAddNewCategorie()">
+        <span class="glyphicon glyphicon-plus"></span>
+      </button>
+    </div>
+    <p></p>
+
+    <div *ngIf="mode=='new-cat'" class="col-md-6">
+      <form #f="ngForm" (ngSubmit)="onSaveCategorie(f.value)">
+        <div class="form-group">
+          <label class="control-label">Name</label>
+          <input [ngModel] [required] class="form-control" name="name" type="text">
+        </div>
+        <button [disabled]="!f.valid" class="btn btn-primary" type="submit">Save</button>
+        <p></p>
+      </form>
+    </div>
+
+    <div *ngIf="mode=='edit-cat'" class="col-md-6">
+      <form #f="ngForm" (ngSubmit)="onUpdateCategorie(f.value)">
+        <div class="form-group">
+          <label class="control-label">Name</label>
+          <input ngModel [required] class="form-control" name="name" type="text" [(ngModel)]="currentCategorie.name">
+        </div>
+        <button [disabled]="!f.valid" class="btn btn-primary" type="submit">Update</button>
+        <p></p>
+      </form>
+    </div>
+
+    <div *ngIf="mode=='list'">
+      <table class="table" *ngIf="categories">
+        <tr>
+          <th>Name</th>
+        </tr>
+        <tr *ngFor="let categorie of categories._embedded.categories">
+          <td>{{categorie.name}}</td>
+          <td>
+            <button class="btn btn-danger" (click)="onDeleteCategorie(categorie)">
+              <span class="glyphicon glyphicon-remove"></span>
+            </button>
+          </td>
+          <td>
+            <button class="btn btn-danger" (click)="onEditCategorie(categorie)">
+              <span class="glyphicon glyphicon-edit"></span>
+            </button>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
