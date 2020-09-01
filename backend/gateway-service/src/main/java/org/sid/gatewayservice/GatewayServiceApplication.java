@@ -7,9 +7,16 @@ import org.springframework.cloud.gateway.discovery.DiscoveryClientRouteDefinitio
 import org.springframework.cloud.gateway.discovery.DiscoveryLocatorProperties;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
+import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @SpringBootApplication
+@EnableHystrix
 public class GatewayServiceApplication {
 
     public static void main(String[] args) {
@@ -49,7 +56,8 @@ public class GatewayServiceApplication {
 
     // ********************* Configuration statique pour appeler les api externes **************************
 
-/*    @Bean
+    //GET localhost:8888/publicCountries/all oder GET localhost:8888/publicCountries/region/africa
+    @Bean
     RouteLocator staticRoutes (RouteLocatorBuilder builder){
         return builder.routes()
                 .route(r->r.path("/publicCountries/**")
@@ -69,6 +77,21 @@ public class GatewayServiceApplication {
                         .uri("http://muslimsalat.p.rapidapi.com").id("r2"))
 
                 .build();
-    }*/
+    }
+
+}
+
+@RestController
+class CircuitBreakerRestController{
+
+    @GetMapping("/defaultCountries")
+    public Map<String,String> countries(){
+        Map<String,String> data = new HashMap<>();
+        data.put("message", "default Countries");
+        data.put("countries","Maroc,Algerie,Tunisie,.....");
+
+        return data;
+    };
+
 
 }
